@@ -1,5 +1,6 @@
 const hre = require("hardhat");
 const fs = require("fs").promises;
+const { storeAddress, getFirstFileInBuildInfo } = require("./utils");
 
 async function appendTimestamp(file) {
   try {
@@ -25,11 +26,13 @@ async function main() {
   await MetaCoinSalted.waitForDeployment();
 
   const address = await MetaCoinSalted.target;
+  const buildInfoFilename = await getFirstFileInBuildInfo();
 
   await storeAddress(
     "./MetaCoinSalted.json",
     hre.network.config.chainId,
-    address
+    address,
+    buildInfoFilename
   );
   console.log(`MetaCoinSalted deployed at ${address}`);
 }
